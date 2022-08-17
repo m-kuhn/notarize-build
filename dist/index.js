@@ -3940,7 +3940,80 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 251:
+/***/ 144:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(186));
+const os = __importStar(__nccwpck_require__(37));
+const notarytool = __importStar(__nccwpck_require__(65));
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            if (os.platform() !== 'darwin') {
+                throw new Error('Action requires macOS agent.');
+            }
+            const issuerId = core.getInput('issuer-id');
+            const apiKeyId = core.getInput('api-key-id');
+            const apiPrivateKey = core.getInput('api-private-key');
+            const appPath = core.getInput('app-path');
+            let output = '';
+            const options = {};
+            options.listeners = {
+                stdout: (data) => {
+                    output += data.toString();
+                }
+            };
+            yield notarytool.installPrivateKey(apiKeyId, apiPrivateKey);
+            yield notarytool.notarizeApp(appPath, apiKeyId, issuerId, options);
+            yield notarytool.deleteAllPrivateKeys();
+            core.setOutput('notarytool-response', output);
+        }
+        catch (error) {
+            core.setFailed(error.message);
+        }
+    });
+}
+run();
+
+
+/***/ }),
+
+/***/ 65:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -3988,24 +4061,23 @@ const path = __importStar(__nccwpck_require__(17));
  @param appPath The path to the app to notarize.
  @param apiKeyId The id of the API key to use (private key must already be installed)
  @param issuerId The issuer identifier of the API key.
- @param primaryBundleId the primary bundle id of the app to notarize.
  @param options (Optional) Command execution options.
  */
-function notarizeApp(appPath, apiKeyId, issuerId, primaryBundleId, options) {
+function notarizeApp(appPath, apiKeyId, issuerId, options) {
     return __awaiter(this, void 0, void 0, function* () {
         const args = [
-            'altool',
-            '--output-format',
-            'json',
-            '--notarize-app',
-            '--file',
+            'notarytool',
+            'submit',
+            //    '--output-format',
+            //    'json',
             appPath,
-            '--apiKey',
+            '--key-path',
+            path.join(privateKeysPath(), `AuthKey_${apiKeyId}.p8`),
+            '--key-id',
             apiKeyId,
-            '--apiIssuer',
+            '--issuer-id',
             issuerId,
-            '--primary-bundle-id',
-            primaryBundleId
+            '--wait'
         ];
         yield exec.exec('xcrun', args, options);
     });
@@ -4046,80 +4118,6 @@ function archive(appPath) {
     });
 }
 exports.archive = archive;
-
-
-/***/ }),
-
-/***/ 144:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(186));
-const os = __importStar(__nccwpck_require__(37));
-const altool = __importStar(__nccwpck_require__(251));
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            if (os.platform() !== 'darwin') {
-                throw new Error('Action requires macOS agent.');
-            }
-            const issuerId = core.getInput('issuer-id');
-            const apiKeyId = core.getInput('api-key-id');
-            const apiPrivateKey = core.getInput('api-private-key');
-            const appPath = core.getInput('app-path');
-            const primaryBundleId = core.getInput('primary-bundle-id');
-            let output = '';
-            const options = {};
-            options.listeners = {
-                stdout: (data) => {
-                    output += data.toString();
-                }
-            };
-            yield altool.installPrivateKey(apiKeyId, apiPrivateKey);
-            yield altool.notarizeApp(appPath, apiKeyId, issuerId, primaryBundleId, options);
-            yield altool.deleteAllPrivateKeys();
-            core.setOutput('altool-response', output);
-        }
-        catch (error) {
-            core.setFailed(error.message);
-        }
-    });
-}
-run();
 
 
 /***/ }),

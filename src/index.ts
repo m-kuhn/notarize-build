@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import * as os from 'os'
-import * as altool from './altool'
+import * as notarytool from './notarytool'
 
 import {ExecOptions} from '@actions/exec/lib/interfaces'
 
@@ -14,7 +14,6 @@ async function run(): Promise<void> {
     const apiKeyId: string = core.getInput('api-key-id')
     const apiPrivateKey: string = core.getInput('api-private-key')
     const appPath: string = core.getInput('app-path')
-    const primaryBundleId: string = core.getInput('primary-bundle-id')
 
     let output = ''
     const options: ExecOptions = {}
@@ -24,17 +23,11 @@ async function run(): Promise<void> {
       }
     }
 
-    await altool.installPrivateKey(apiKeyId, apiPrivateKey)
-    await altool.notarizeApp(
-      appPath,
-      apiKeyId,
-      issuerId,
-      primaryBundleId,
-      options
-    )
-    await altool.deleteAllPrivateKeys()
+    await notarytool.installPrivateKey(apiKeyId, apiPrivateKey)
+    await notarytool.notarizeApp(appPath, apiKeyId, issuerId, options)
+    await notarytool.deleteAllPrivateKeys()
 
-    core.setOutput('altool-response', output)
+    core.setOutput('notarytool-response', output)
   } catch (error) {
     core.setFailed((error as Error).message)
   }

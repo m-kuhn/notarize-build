@@ -10,29 +10,27 @@ import {ExecOptions} from '@actions/exec/lib/interfaces'
  @param appPath The path to the app to notarize.
  @param apiKeyId The id of the API key to use (private key must already be installed)
  @param issuerId The issuer identifier of the API key.
- @param primaryBundleId the primary bundle id of the app to notarize.
  @param options (Optional) Command execution options.
  */
 export async function notarizeApp(
   appPath: string,
   apiKeyId: string,
   issuerId: string,
-  primaryBundleId: string,
   options?: ExecOptions
 ): Promise<void> {
   const args: string[] = [
-    'altool',
-    '--output-format',
-    'json',
-    '--notarize-app',
-    '--file',
+    'notarytool',
+    'submit',
+    //    '--output-format',
+    //    'json',
     appPath,
-    '--apiKey',
+    '--key-path',
+    path.join(privateKeysPath(), `AuthKey_${apiKeyId}.p8`),
+    '--key-id',
     apiKeyId,
-    '--apiIssuer',
+    '--issuer-id',
     issuerId,
-    '--primary-bundle-id',
-    primaryBundleId
+    '--wait'
   ]
 
   await exec.exec('xcrun', args, options)
