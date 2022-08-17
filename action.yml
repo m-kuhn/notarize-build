@@ -1,0 +1,28 @@
+name: 'Notarize an app'
+description: 'Notarize an app'
+author: 'OPENGIS.ch'
+inputs:
+  app-path:
+    description: 'The path to the app (dmg etc)'
+    required: true
+  primary-bundle-id:
+    description: 'The primary bundle id of the app to notarize'
+    required: true
+  issuer-id:
+    description: 'The AppStoreConnect API Key Issuer Identifier'
+    required: true
+  api-key-id:
+    description: 'The Key ID for AppStore Connect API'
+    required: true
+  api-private-key:
+    description: 'The PKCS8 format Private Key for AppStore Connect API'
+    required: true
+outputs:
+  altool-response:
+    description: 'JSON output from altool'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: 'arrow-up-circle'
+  color: 'blue'

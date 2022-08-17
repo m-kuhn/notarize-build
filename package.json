@@ -1,0 +1,40 @@
+{
+  "name": "notarize-build-action",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A GitHub Action that notarizes an app",
+  "main": "src/index.ts",
+  "scripts": {
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "all": "npm run format && npm run lint && npm run package"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/m-kuhn/notarize-build.git"
+  },
+  "keywords": [
+    "actions",
+    "node",
+    "setup"
+  ],
+  "author": "OPENGIS.ch",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/exec": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.25",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "@vercel/ncc": "^0.34.0",
+    "eslint": "^8.22.0",
+    "eslint-plugin-github": "^4.3.2",
+    "js-yaml": "^4.1.0",
+    "prettier": "2.5.1",
+    "typescript": "^4.4.4"
+  }
+}
