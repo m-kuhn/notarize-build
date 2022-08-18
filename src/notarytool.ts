@@ -59,6 +59,7 @@ export async function deleteAllPrivateKeys(): Promise<void> {
   await io.rmRF(privateKeysPath())
 }
 
+// Currently unused, we can just send a dmg. Will be needed if we want to support different formats
 export async function archive(appPath: string): Promise<string> {
   const archivePath = '/tmp/archive.zip' // TODO Temporary file
 
