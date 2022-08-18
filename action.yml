@@ -17,6 +17,8 @@ inputs:
 outputs:
   notarytool-response:
     description: 'JSON output from notarytool'
+  stapler-response:
+    description: 'JSON output from notarytool'
 runs:
   using: 'node12'
   main: 'dist/index.js'

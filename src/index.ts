@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import * as os from 'os'
 import * as notarytool from './notarytool'
+import * as stapler from './stapler'
 
 import {ExecOptions} from '@actions/exec/lib/interfaces'
 
@@ -26,8 +27,10 @@ async function run(): Promise<void> {
     await notarytool.installPrivateKey(apiKeyId, apiPrivateKey)
     await notarytool.notarizeApp(appPath, apiKeyId, issuerId, options)
     await notarytool.deleteAllPrivateKeys()
-
     core.setOutput('notarytool-response', output)
+    output = ''
+    await stapler.stapleApp(appPath)
+    core.setOutput('stapler-response', output)
   } catch (error) {
     core.setFailed((error as Error).message)
   }
