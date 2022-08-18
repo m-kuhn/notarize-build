@@ -4075,11 +4075,11 @@ function notarizeApp(appPath, apiKeyId, issuerId, options) {
             //    '--output-format',
             //    'json',
             appPath,
-            '--key-path',
+            '--key',
             path.join(privateKeysPath(), `AuthKey_${apiKeyId}.p8`),
             '--key-id',
             apiKeyId,
-            '--issuer-id',
+            '--issuer',
             issuerId,
             '--wait'
         ];
