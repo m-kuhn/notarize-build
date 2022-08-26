@@ -1,5 +1,4 @@
 auto-merge:
-    needs: ci_dev
     permissions:
         contents: write
         pull-requests: write
