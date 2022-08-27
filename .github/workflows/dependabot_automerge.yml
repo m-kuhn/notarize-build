@@ -1,6 +1,6 @@
 on: [pull_request]
 jobs:
-auto-merge:
+    auto-merge:
         permissions:
             contents: write
             pull-requests: write
