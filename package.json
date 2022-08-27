@@ -36,7 +36,7 @@
     "js-yaml": "^4.1.0",
     "pre-commit": "^1.2.2",
     "prettier": "2.5.1",
-    "typescript": "^4.4.4"
+    "typescript": "^4.8.2"
   },
   "pre-commit": {
     "run": "all"
